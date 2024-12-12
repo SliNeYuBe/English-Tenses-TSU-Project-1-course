@@ -25,19 +25,16 @@ async def cmd_start(message: Message):
 @router.message(F.text == 'Профиль')
 async def profile(message: Message):
     test = await rq.get_test(message.from_user.id)
-    test_past = test.test_past_1 + test.test_past_2 + test.test_past_3 + test.test_past_4
-    test_present = test.test_present_1 + test.test_present_2 + test.test_present_3 + test.test_present_4
-    test_future = test.test_future_1 + test.test_future_2 + test.test_future_3 + test.test_future_4
-    if test_past == test_present == test_future == 4:
+    if '✅' in test.test_past and '✅' in test.test_present and '✅' in test.test_future:
         await message.answer(
-            f'🕗 Здравствуйте, Повелитель времени {message.from_user.full_name}! 🕗\n\nАчивки:\n\n{test.test_past[:2]} Past Test: {test.test_past[3:]}'
-            f'\n\n{test.test_present[:2]} Present Test: {test.test_present[3:]}'
-            f'\n\n{test.test_future[:2]} Future Test: {test.test_future[3:]}')
+            f'🕗 Здравствуйте, Повелитель времени {message.from_user.full_name}! 🕗\n\nАчивки:\n\n{test.test_past[:2]} Past Tense: {test.test_past[3:]}'
+            f'\n\n{test.test_present[:2]} Present Tense: {test.test_present[3:]}'
+            f'\n\n{test.test_future[:2]} Future Tense: {test.test_future[3:]}')
     else:
         await message.answer(
-            f'Здравствуйте, {message.from_user.full_name}!\n\nДостижения:\n\n{test.test_past[:2]} Past Test: {test.test_past[3:]}'
-            f'\n\n{test.test_present[:2]} Present Test: {test.test_present[3:]}'
-            f'\n\n{test.test_future[:2]} Future Test: {test.test_future[3:]}')
+            f'Здравствуйте, {message.from_user.full_name}!\n\nДостижения:\n\n{test.test_past[:2]} Past Tense: {test.test_past[3:]}'
+            f'\n\n{test.test_present[:2]} Present Tense: {test.test_present[3:]}'
+            f'\n\n{test.test_future[:2]} Future Tense: {test.test_future[3:]}')
 
 
 @router.message(F.text == 'Обратная связь')
