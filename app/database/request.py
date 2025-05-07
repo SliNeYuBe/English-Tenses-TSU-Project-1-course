@@ -63,6 +63,13 @@ async def update_test_future(tg_id):
         await session.commit()
 
 
+async def update_test(tg_id, field_name, value = 1):
+    async with async_session() as session:
+        user = await session.scalar(select(Test).where(Test.tg_id == tg_id))
+        setattr(user, field_name, value)
+        await session.commit()
+
+'''
 async def update_test_past_1(tg_id):
     async with async_session() as session:
         user = await session.scalar(select(Test).where(Test.tg_id == tg_id))
@@ -136,3 +143,4 @@ async def update_test_future_4(tg_id):
         user = await session.scalar(select(Test).where(Test.tg_id == tg_id))
         user.test_future_4 = 1
         await session.commit()
+'''

@@ -72,7 +72,7 @@ async def present_answer_4(message: Message, state: FSMContext):
         await message.answer(
             f"Тест завершен! Вы ответили правильно на {correct_answers} из 3 вопросов и завершили тему Present Simple!",
             reply_markup=kb.main)
-        await rq.update_test_present_1(message.from_user.id)
+        await rq.update_test(message.from_user.id, "test_present_1")
         test = await rq.get_test(message.from_user.id)
         if test.test_present_1 + test.test_present_2 + test.test_present_3 + test.test_present_4 == 4 and '❌' in test.test_present:
             await rq.update_test_present(message.from_user.id)
