@@ -24,17 +24,17 @@ async def cmd_start(message: Message):
 
 @router.message(F.text == 'Профиль')
 async def profile(message: Message):
-    test = await rq.get_test(message.from_user.id)
-    if '✅' in test.test_past and '✅' in test.test_present and '✅' in test.test_future:
+    test = await rq.get_profile(message.from_user.id)
+    if '✅' in test.achievements_past and '✅' in test.achievements_present and '✅' in test.achievements_future:
         await message.answer(
-            f'🕗 Здравствуйте, Повелитель времени {message.from_user.full_name}! 🕗\n\nАчивки:\n\n{test.test_past[:2]} Past Tense: {test.test_past[3:]}'
-            f'\n\n{test.test_present[:2]} Present Tense: {test.test_present[3:]}'
-            f'\n\n{test.test_future[:2]} Future Tense: {test.test_future[3:]}')
+            f'🕗 Здравствуйте, Повелитель времени {message.from_user.full_name}! 🕗\n\nАчивки:\n\n{test.achievements_past[:2]} Past Tense: {test.achievements_past[3:]}'
+            f'\n\n{test.achievements_present[:2]} Present Tense: {test.achievements_present[3:]}'
+            f'\n\n{test.achievements_future[:2]} Future Tense: {test.achievements_future[3:]}')
     else:
         await message.answer(
-            f'Здравствуйте, {message.from_user.full_name}!\n\nДостижения:\n\n{test.test_past[:2]} Past Tense: {test.test_past[3:]}'
-            f'\n\n{test.test_present[:2]} Present Tense: {test.test_present[3:]}'
-            f'\n\n{test.test_future[:2]} Future Tense: {test.test_future[3:]}')
+            f'Здравствуйте, {message.from_user.full_name}!\n\nДостижения:\n\n{test.achievements_past[:2]} Past Tense: {test.achievements_past[3:]}'
+            f'\n\n{test.achievements_present[:2]} Present Tense: {test.achievements_present[3:]}'
+            f'\n\n{test.achievements_future[:2]} Future Tense: {test.achievements_future[3:]}')
 
 
 @router.message(F.text == 'Обратная связь')
@@ -253,12 +253,12 @@ async def choose_past(message: Message):
 
 @router.message(F.text == 'Present')
 async def choose_past(message: Message):
-    await message.answer("Выберите одну из тем Past: ", reply_markup=kb.present)
+    await message.answer("Выберите одну из тем Present: ", reply_markup=kb.present)
 
 
 @router.message(F.text == 'Future')
 async def choose_past(message: Message):
-    await message.answer("Выберите одну из тем Past: ", reply_markup=kb.future)
+    await message.answer("Выберите одну из тем Future: ", reply_markup=kb.future)
 
 
 @router.callback_query(F.data == 'back_time')
