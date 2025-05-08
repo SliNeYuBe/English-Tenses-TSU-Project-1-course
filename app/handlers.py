@@ -1,14 +1,10 @@
 from aiogram import F, Router
-from aiogram.filters import CommandStart, Command
+from aiogram.filters import CommandStart
 from aiogram.types import Message, CallbackQuery
-from aiogram.fsm.state import StatesGroup, State
-from aiogram.fsm.context import FSMContext
-from pyexpat.errors import messages
 
-import app.questions as qt
-import app.keyboards as kb
 import app.database.request as rq
-from app.keyboards import test_choose
+import app.keyboards as kb
+from app.keyboards import test_choose, main_kb
 
 router = Router()
 
@@ -19,7 +15,7 @@ tenses = ''
 async def cmd_start(message: Message):
     await rq.set_user(message.from_user.id, message.from_user.full_name)
     await message.answer(f'Добро пожаловать, {message.from_user.full_name}!',
-                         reply_markup=kb.main)
+                         reply_markup=await main_kb(message.from_user.id))
 
 
 @router.message(F.text == 'Профиль')
@@ -40,7 +36,7 @@ async def profile(message: Message):
 @router.message(F.text == 'Обратная связь')
 async def feedback(message: Message):
     await message.answer('Если возникли ошибки, вопросы или хотите предложить идею для доработки бота, обращайтесь ко мне в лс: @SliNeYuBe',
-    reply_markup=kb.main)
+    reply_markup=await main_kb(message.from_user.id))
 
 
 @router.message(F.text == 'Лекции')
@@ -238,7 +234,7 @@ async def category_time(callback: CallbackQuery):
 
 @router.message(F.text == 'Назад')
 async def to_return(message: Message):
-    await message.answer('Вы вернулись в главное меню', reply_markup=kb.main)
+    await message.answer('Вы вернулись в главное меню', reply_markup=await main_kb(message.from_user.id))
 
 
 @router.message(F.text == 'Тесты')

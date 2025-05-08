@@ -19,6 +19,14 @@ class User(Base):
     achievements_past: Mapped[str] = mapped_column(String(125))
     achievements_present: Mapped[str] = mapped_column(String(125))
     achievements_future: Mapped[str] = mapped_column(String(125))
+    complete_tests: Mapped[int] = mapped_column(Integer)
+
+
+class Admin(Base):
+    __tablename__ = 'admins'
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    tg_id: Mapped[int] = mapped_column(BigInteger, nullable=True)
 
 
 class TestPast(Base):

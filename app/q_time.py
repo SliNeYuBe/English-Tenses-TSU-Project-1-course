@@ -2,6 +2,7 @@ from aiogram import F, Router
 from aiogram.types import Message
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.context import FSMContext
+from app.keyboards import main_kb
 
 import app.questions as qt
 import app.keyboards as kb
@@ -61,7 +62,7 @@ async def past_answer_2(message: Message, state: FSMContext):
         await state.clear()
         await message.answer(
             f"Тест завершен! Вы ответили правильно на {correct_answers} из {len(questions)} вопросов!",
-            reply_markup=kb.main)
+            reply_markup=await main_kb(message.from_user.id))
         if correct_answers == len(questions):
             await rq.update_small_test(message.from_user.id, data['topic'])
             if (await rq.update_big_test(tg_id = message.from_user.id, field_test=data['topic'])):

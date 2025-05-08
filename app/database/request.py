@@ -1,9 +1,7 @@
-from os.path import commonpath
+from sqlalchemy import select
 
+from app.database.models import User, Admin, TestPast, TestPresent, TestFuture
 from app.database.models import async_session
-from app.database.models import User, TestPast, TestPresent, TestFuture
-from sqlalchemy import select, update
-from aiogram.types import Message
 
 
 async def set_user(tg_id, name):
@@ -14,7 +12,10 @@ async def set_user(tg_id, name):
                              name = name,
                              achievements_past='🕗❌ Вы ещё не прошли все нужные темы!',
                              achievements_present='🕗❌ Вы ещё не прошли все нужные темы!',
-                             achievements_future='🕗❌ Вы ещё не прошли все нужные темы!'))
+                             achievements_future='🕗❌ Вы ещё не прошли все нужные темы!',
+                             complete_tests=0))
+
+            session.add(Admin(tg_id=None))
 
             session.add(TestPast(tg_id=tg_id,
                              test_past_1=False,
@@ -43,6 +44,17 @@ async def set_user(tg_id, name):
 async def get_profile(profile_id):
     async with async_session() as session:
         return await session.scalar(select(User).where(User.tg_id == profile_id))
+
+
+async def get_all_profile():
+    async with async_session() as session:
+        result = await session.scalars(select(User))
+        return result.all()
+
+
+async def get_admin(profile_id):
+    async with async_session() as session:
+        return await session.scalar(select(Admin).where(Admin.tg_id == profile_id))
 
 
 BD_SETS = {
@@ -91,6 +103,7 @@ async def update_big_test(tg_id, field_test):
         if sum_test == 4 and getattr(user, field_test) == '🕗❌ Вы ещё не прошли все нужные темы!':
             user = await session.scalar(select(User).where(User.tg_id == tg_id))
             setattr(user, field_test, achievement_test)
+            user.complete_tests += 1
             await session.commit()
             return True
 

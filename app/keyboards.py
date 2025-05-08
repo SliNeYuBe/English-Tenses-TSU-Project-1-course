@@ -1,14 +1,21 @@
 from aiogram.types import (ReplyKeyboardMarkup, KeyboardButton,
                            InlineKeyboardMarkup, InlineKeyboardButton)
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
+import app.database.request as rq
 
-
-main = ReplyKeyboardMarkup(keyboard=[
-    [KeyboardButton(text='Лекции'), KeyboardButton(text='Тесты')],
-    [KeyboardButton(text='Профиль'), KeyboardButton(text='Обратная связь')]
-],
-    resize_keyboard = True,
-    input_field_placeholder = 'Выберите пункт меню...')
+async def main_kb(tg_id):
+    kb_list = [[KeyboardButton(text='Лекции'), KeyboardButton(text='Тесты')],
+    [KeyboardButton(text='Профиль')]]
+    admin = await rq.get_admin(tg_id)
+    if admin is not None:
+        kb_list[1].append(KeyboardButton(text='Админ панель'))
+    else:
+        kb_list[1].append(KeyboardButton(text='Обратная связь'))
+    return ReplyKeyboardMarkup(
+        keyboard=kb_list,
+        resize_keyboard=True,
+        input_field_placeholder = 'Выберите пункт меню...'
+    )
 
 time = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text = 'Past', callback_data='past'),
